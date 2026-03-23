@@ -1,0 +1,66 @@
+{
+  "card1": {
+    "config": {
+      "wide_screen_mode": true
+    },
+    "header": {
+      "template": "blue",
+      "title": {
+        "tag": "plain_text",
+        "content": "🧪 测试 - 蓝色标题"
+      }
+    },
+    "elements": [
+      {
+        "tag": "div",
+        "text": {
+          "tag": "lark_md",
+          "content": "这是测试内容"
+        }
+      }
+    ]
+  },
+  "card2": {
+    "config": {
+      "wide_screen_mode": true
+    },
+    "elements": [
+      {
+        "tag": "title",
+        "content": "🧪 测试 - 蓝色标题",
+        "template": "blue"
+      },
+      {
+        "tag": "div",
+        "text": {
+          "tag": "lark_md",
+          "content": "这是测试内容"
+        }
+      }
+    ]
+  },
+  "card3": {
+    "config": {
+      "wide_screen_mode": true,
+      "style": {
+        "color": "blue"
+      }
+    },
+    "header": {
+      "template": "blue",
+      "title": {
+        "tag": "plain_text",
+        "content": "🧪 测试 - 蓝色标题"
+      }
+    },
+    "elements": [
+      {
+        "tag": "div",
+        "text": {
+          "tag": "lark_md",
+          "content": "这是测试内容"
+        }
+      }
+    ]
+  }
+}

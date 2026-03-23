@@ -1,0 +1,193 @@
+{
+  "test1": {
+    "data": {
+      "task_id": "46241af0-a753-4dbc-abab-c224cf827950",
+      "title": "🧪 测试 #1 - 基础功能验证",
+      "titleTemplate": "blue",
+      "lang": "zh",
+      "status": "todo",
+      "subtasks": [
+        {
+          "id": "step1",
+          "label": "环境准备",
+          "status": "todo"
+        },
+        {
+          "id": "step2",
+          "label": "代码部署",
+          "status": "todo"
+        },
+        {
+          "id": "step3",
+          "label": "功能验证",
+          "status": "todo"
+        }
+      ],
+      "messages": [
+        {
+          "text": "测试任务 #1 已创建",
+          "level": "info",
+          "time": "2026-03-21T03:20:53.706Z"
+        }
+      ],
+      "actions": [
+        {
+          "text": "开始测试",
+          "action": "start_test",
+          "type": "primary",
+          "payload": {
+            "testNumber": 1
+          }
+        },
+        {
+          "text": "跳过",
+          "action": "skip",
+          "type": "default",
+          "payload": {}
+        }
+      ]
+    },
+    "card": {
+      "config": {
+        "wide_screen_mode": true
+      },
+      "header": {
+        "template": "blue",
+        "title": {
+          "tag": "plain_text",
+          "content": "🧪 测试 #1 - 基础功能验证"
+        }
+      },
+      "elements": [
+        {
+          "tag": "div",
+          "text": {
+            "tag": "lark_md",
+            "content": "**状态**: todo\\n**进度**: 0%"
+          }
+        },
+        {
+          "tag": "action",
+          "actions": [
+            {
+              "tag": "button",
+              "text": {
+                "tag": "plain_text",
+                "content": "开始测试"
+              },
+              "type": "primary",
+              "value": "{\"action\":\"start_test\",\"task_id\":\"46241af0-a753-4dbc-abab-c224cf827950\",\"testNumber\":1}"
+            },
+            {
+              "tag": "button",
+              "text": {
+                "tag": "plain_text",
+                "content": "跳过"
+              },
+              "type": "default",
+              "value": "{\"action\":\"skip\",\"task_id\":\"46241af0-a753-4dbc-abab-c224cf827950\"}"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "test2": {
+    "data": {
+      "task_id": "aa95afc7-7d25-40e0-8763-cd878f604b53",
+      "title": "🧪 测试 #2 - 错误状态",
+      "titleTemplate": "red",
+      "lang": "zh",
+      "status": "error",
+      "subtasks": [
+        {
+          "id": "step1",
+          "label": "环境准备",
+          "status": "done"
+        },
+        {
+          "id": "step2",
+          "label": "代码部署",
+          "status": "error"
+        },
+        {
+          "id": "step3",
+          "label": "功能验证",
+          "status": "error"
+        }
+      ],
+      "messages": [
+        {
+          "text": "测试任务 #2 已创建",
+          "level": "info",
+          "time": "2026-03-21T03:20:53.708Z"
+        },
+        {
+          "text": "模拟错误：连接超时",
+          "level": "error",
+          "time": "2026-03-21T03:20:53.708Z"
+        }
+      ],
+      "actions": [
+        {
+          "text": "开始测试",
+          "action": "start_test",
+          "type": "primary",
+          "payload": {
+            "testNumber": 2
+          }
+        },
+        {
+          "text": "跳过",
+          "action": "skip",
+          "type": "default",
+          "payload": {}
+        }
+      ]
+    },
+    "card": {
+      "config": {
+        "wide_screen_mode": true
+      },
+      "header": {
+        "template": "red",
+        "title": {
+          "tag": "plain_text",
+          "content": "🧪 测试 #2 - 错误状态"
+        }
+      },
+      "elements": [
+        {
+          "tag": "div",
+          "text": {
+            "tag": "lark_md",
+            "content": "**状态**: error\\n**进度**: 33%"
+          }
+        },
+        {
+          "tag": "action",
+          "actions": [
+            {
+              "tag": "button",
+              "text": {
+                "tag": "plain_text",
+                "content": "开始测试"
+              },
+              "type": "primary",
+              "value": "{\"action\":\"start_test\",\"task_id\":\"aa95afc7-7d25-40e0-8763-cd878f604b53\",\"testNumber\":2}"
+            },
+            {
+              "tag": "button",
+              "text": {
+                "tag": "plain_text",
+                "content": "跳过"
+              },
+              "type": "default",
+              "value": "{\"action\":\"skip\",\"task_id\":\"aa95afc7-7d25-40e0-8763-cd878f604b53\"}"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
