@@ -311,10 +311,6 @@ function renderMessages(messages = [], lang = "zh") {
       const streamHint = isStreaming ? ' ⏳' : '';
       parsedElements.push({ tag: "markdown", content: "▸ *" + (lang === 'zh' ? '最新回复' : 'Latest') + `*${streamHint}` });
     }
-
-    if (!isLatest) {
-      parsedElements.push({ tag: "hr" });
-    }
   });
 
   const totalMsgs = validMessages.length;
@@ -436,18 +432,22 @@ function buildCardContent(task, lang = "zh") {
       text: { tag: "lark_md", content: errMsg }
     });
   }
-  
-  // 操作按钮
+
   const defaultActions = [
     { text: lang === "zh" ? "重试" : "Retry", action: "retry", type: "primary" },
     { text: lang === "zh" ? "继续" : "Continue", action: "continue", type: "default" }
   ];
-  
+
   const actions = task.actions || defaultActions;
-  if (actions.length > 0) {
-    elements.push({
-      tag: "hr"
-    });
+  const hasActions = actions.length > 0;
+  const allMsgText = (task.messages || []).map(m => `${m.level || 'info'}: ${m.text || ''}`).join('\n---\n');
+  const hasCopyBtn = !!allMsgText;
+
+  if (hasActions || hasCopyBtn) {
+    elements.push({ tag: "hr" });
+  }
+
+  if (hasActions) {
     elements.push({
       tag: "action",
       children: actions.map((action) => ({
@@ -465,13 +465,11 @@ function buildCardContent(task, lang = "zh") {
       }))
     });
   }
-  
+
   const statusColorMap = { error: "red", done: "green", success: "green", doing: "blue", warn: "yellow" };
   const headerColor = task.titleTemplate || statusColorMap[task.status] || "blue";
 
-  const allMsgText = (task.messages || []).map(m => `${m.level || 'info'}: ${m.text || ''}`).join('\n---\n');
   if (allMsgText) {
-    elements.push({ tag: "hr" });
     elements.push({
       tag: "action",
       children: [{
