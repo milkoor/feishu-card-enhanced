@@ -1,0 +1,71 @@
+{
+  "self_check_20260325": {
+    "card_id": "self_check_20260325",
+    "message_id": "om_x100b5305d7e73ca4c2ba7ddb9e224f5",
+    "receive_id": "ou_f0379d8fcd5415cb06da40e5a46e3758",
+    "receive_id_type": "open_id",
+    "task": {
+      "task_id": "self_check_20260325",
+      "title": "系统自检",
+      "titleTemplate": "blue",
+      "status": "done",
+      "subtasks": [
+        {
+          "id": "1",
+          "label": "检查工作区配置文件",
+          "status": "done"
+        },
+        {
+          "id": "2",
+          "label": "检查工具配置",
+          "status": "done"
+        },
+        {
+          "id": "3",
+          "label": "检查记忆系统",
+          "status": "done"
+        },
+        {
+          "id": "4",
+          "label": "检查飞书连接",
+          "status": "done"
+        }
+      ],
+      "messages": [
+        {
+          "text": "✅ 配置文件检查完成",
+          "level": "success",
+          "time": "08:23"
+        },
+        {
+          "text": "✅ 工具配置检查完成",
+          "level": "success",
+          "time": "08:24"
+        },
+        {
+          "text": "✅ 记忆系统检查完成",
+          "level": "success",
+          "time": "08:24"
+        },
+        {
+          "text": "✅ 飞书连接正常",
+          "level": "success",
+          "time": "08:24"
+        },
+        {
+          "text": "## 自检结果\n\n### ✅ 正常项\n- **配置文件**: AGENTS.md, SOUL.md, USER.md, TOOLS.md, HEARTBEAT.md, IDENTITY.md 全部存在\n- **记忆系统**: memory/ 目录正常，MEMORY.md 和日志文件完整\n- **飞书连接**: 插件状态 OK，无报错\n- **技能目录**: 18 个技能已安装\n\n### ⚠️ 注意项\n- **BOOTSTRAP.md 缺失**: `/home/mk/.openclaw/workspace/BOOTSTRAP.md` 不存在（可能影响部分启动逻辑）\n- **根目录 config.json 缺失**: `/home/mk/.openclaw/config.json` 不存在（可能使用默认配置）\n\n### 建议\n如无功能异常，以上注意项可忽略。需要补充 BOOTSTRAP.md 可告知。",
+          "level": "info",
+          "time": "08:24"
+        },
+        {
+          "text": "✅ 已补充 BOOTSTRAP.md 到工作区",
+          "level": "success",
+          "time": "2026-03-25T00:37:14.255Z"
+        }
+      ]
+    },
+    "sequence": 3,
+    "created_at": "2026-03-24T23:09:06.907Z",
+    "updated_at": "2026-03-25T00:37:15.014Z"
+  }
+}

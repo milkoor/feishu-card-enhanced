@@ -72,6 +72,60 @@ function safeJSON(str, defaultValue = null) {
   }
 }
 
+/**
+ * 参数校验和自动修复 - 解决模型传参格式错误问题
+ * 模型可能将数组/对象误传为 JSON 字符串，此函数自动修复
+ */
+function validateParams(params) {
+  const errors = [];
+  const fixed = { ...params };
+  const schema = {
+    task_id: { type: "string", required: true },
+    title: { type: "string" },
+    titleTemplate: { type: "string" },
+    status: { type: "string" },
+    subtasks: { type: "array" },
+    messages: { type: "array" },
+    actions: { type: "array" },
+    lastError: { type: "string" },
+    lang: { type: "string" }
+  };
+  
+  for (const [key, value] of Object.entries(schema)) {
+    if (value.required && (value === undefined || value === null)) {
+      errors.push(`Missing required: ${key}`);
+      continue;
+    }
+    
+    if (params[key] === undefined) {
+      continue;
+    }
+    
+    if (value.type === "array" && typeof params[key] === "string") {
+      try {
+        const parsed = JSON.parse(params[key]);
+        if (Array.isArray(parsed)) {
+          fixed[key] = parsed;
+        } else {
+          errors.push(`${key}: not a valid array`);
+        }
+      } catch {
+        errors.push(`${key}: invalid JSON string, expected array`);
+      }
+    }
+    
+    if (value.type === "object" && typeof params[key] === "string") {
+      try {
+        fixed[key] = JSON.parse(params[key]);
+      } catch {
+        errors.push(`${key}: invalid JSON string, expected object`);
+      }
+    }
+  }
+  
+  return { errors, fixed };
+}
+
 // ==================== API 凭证获取 ====================
 
 /**
@@ -601,7 +655,55 @@ export default function (api) {
       }
     },
     async execute(_toolCallId, params) {
-      const { receive_id_type, receive_id, task } = params;
+      // 参数校验和自动修复 - task/subtasks/messages 等参数可能是 JSON 字符串
+      let { receive_id_type, receive_id, task } = params;
+      
+      // 检查必要参数
+      if (!task) {
+        return { success: false, error: "Missing required parameter: task" };
+      }
+      
+      // 自动修复 task 对象
+      if (typeof task === "string") {
+        try {
+          task = JSON.parse(task);
+        } catch (e) {
+          return { success: false, error: `Invalid task JSON string: ${e.message}` };
+        }
+      }
+      
+      // 确保 task 是对象
+      if (typeof task !== "object" || task === null) {
+        return { success: false, error: "task parameter must be an object" };
+      }
+      
+      // 自动修复 subtasks 数组
+      if (task && typeof task.subtasks === "string") {
+        try {
+          task.subtasks = JSON.parse(task.subtasks);
+        } catch (e) {
+          console.warn("[feishu-card] subtasks parse warning:", e.message);
+        }
+      }
+      
+      // 自动修复 messages 数组
+      if (task && typeof task.messages === "string") {
+        try {
+          task.messages = JSON.parse(task.messages);
+        } catch (e) {
+          console.warn("[feishu-card] messages parse warning:", e.message);
+        }
+      }
+      
+      // 自动修复 actions 数组
+      if (task && typeof task.actions === "string") {
+        try {
+          task.actions = JSON.parse(task.actions);
+        } catch (e) {
+          console.warn("[feishu-card] actions parse warning:", e.message);
+        }
+      }
+      
       try {
         // 获取 token
         const token = await getTenantAccessToken(api);
@@ -647,20 +749,93 @@ export default function (api) {
    */
   api.registerTool({
     name: "task_card_update",
-    description: "更新已有任务卡片的状态、子任务、消息流等",
+    description: "更新已有任务卡片的状态、子任务、消息流等。注意：subtasks 和 messages 参数必须是数组对象，不是 JSON 字符串",
     parameters: {
-      task_id: { type: "string" },
-      title: { type: "string" },
-      titleTemplate: { type: "string" },
-      status: { type: "string" },
-      subtasks: { type: "array" },
-      messages: { type: "array" },
-      actions: { type: "array" },
-      lastError: { type: "string" },
-      lang: { type: "string" }
+      task_id: { 
+        type: "string", 
+        description: "任务ID (必需)" 
+      },
+      title: { 
+        type: "string",
+        description: "卡片标题" 
+      },
+      titleTemplate: { 
+        type: "string", 
+        enum: ["blue", "green", "red", "yellow", "orange", "purple", "grey"],
+        description: "标题颜色模板" 
+      },
+      status: { 
+        type: "string", 
+        enum: ["todo", "doing", "done", "error"],
+        description: "任务状态：todo=待处理, doing=进行中, done=已完成, error=错误" 
+      },
+      subtasks: {
+        type: "array",
+        description: "子任务列表，必须是数组对象",
+        items: {
+          type: "object",
+          required: ["id", "label"],
+          properties: {
+            id: { type: "string", description: "子任务ID" },
+            label: { type: "string", description: "子任务名称" },
+            status: { 
+              type: "string", 
+              enum: ["todo", "doing", "done"],
+              description: "子任务状态" 
+            },
+            detail: { type: "string", description: "详细说明" }
+          }
+        }
+      },
+      messages: {
+        type: "array",
+        description: "消息列表，必须是数组对象",
+        items: {
+          type: "object",
+          required: ["text"],
+          properties: {
+            text: { type: "string", description: "消息内容" },
+            level: { 
+              type: "string", 
+              enum: ["info", "success", "warning", "error"],
+              description: "消息级别" 
+            },
+            time: { type: "string", description: "时间戳" }
+          }
+        }
+      },
+      actions: {
+        type: "array",
+        description: "操作按钮列表",
+        items: {
+          type: "object",
+          properties: {
+            text: { type: "string" },
+            action: { type: "string" },
+            type: { type: "string" },
+            payload: { type: "object" }
+          }
+        }
+      },
+      lastError: { 
+        type: "string",
+        description: "最后错误信息" 
+      },
+      lang: { 
+        type: "string",
+        enum: ["zh", "en"],
+        description: "语言设置" 
+      }
     },
     async execute(_toolCallId, params) {
-      const { task_id, title, titleTemplate, status, subtasks, messages, actions, lastError, lang } = params;
+      // 参数校验和自动修复
+      const fixedParams = validateParams(params);
+      if (fixedParams.errors.length > 0) {
+        console.warn("[feishu-card] 参数警告:", fixedParams.errors.join("; "));
+      }
+      
+      const { task_id, title, titleTemplate, status, subtasks, messages, actions, lastError, lang } = fixedParams.fixed;
+      
       try {
         const taskState = state[task_id];
         if (!taskState) {
