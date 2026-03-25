@@ -26,7 +26,18 @@ Feishu Card Enhanced is an OpenClaw plugin that provides enhanced Feishu/Lark in
 
 ### Installation
 
-#### 1. Install via OpenClaw
+#### 1. Install via GitHub (Recommended)
+
+```bash
+# Clone to OpenClaw extensions directory
+cd ~/.openclaw/extensions
+git clone https://github.com/milkoor/feishu-card-enhanced.git
+
+# Restart OpenClaw
+openclaw gateway restart
+```
+
+#### 2. Install via OpenClaw
 
 ```bash
 # Copy to extensions directory
@@ -222,7 +233,18 @@ MIT License
 
 ### 安装
 
-#### 1. 通过 OpenClaw 安装
+#### 1. 通过 GitHub 安装（推荐）
+
+```bash
+# 克隆到 OpenClaw 扩展目录
+cd ~/.openclaw/extensions
+git clone https://github.com/milkoor/feishu-card-enhanced.git
+
+# 重启 OpenClaw
+openclaw gateway restart
+```
+
+#### 2. 通过 OpenClaw 安装
 
 ```bash
 # 复制到扩展目录
